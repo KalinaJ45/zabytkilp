@@ -197,13 +197,288 @@ class ZabytkiLP:
             self.dlg = ZabytkiLPDialog()
 
      
+        # zmienne globalne
+        savelayerPath=""
+        openLayerPath=""
+        fieldName=["NAZWA", "KATEG", "FUNKCJA", "CZY_ZESP", "DATOW","DOKUM","CZY_DZIER","CZY_DOST","UWAGI"]
+
+        # funkcja ustawiająca dostępność sekcji i przycisków przy wyborze opcji edycji obiektu
+        def makeEnabled():
+            if self.dlg.createLayerBtn.isChecked()== True:
+                self.dlg.createBox.setEnabled(True)
+                self.dlg.clearBtn.setEnabled(True)
+                self.dlg.geometryBox.setEnabled(True)
+                self.dlg.editBox.setEnabled(False)
+               
+            if self.dlg.editBtn.isChecked()== True:
+                self.dlg.editBox.setEnabled(True)
+                self.dlg.openBtn.setEnabled(False)
+                self.dlg.clearBtn.setEnabled(True)
+                self.dlg.createBox.setEnabled(False)
+            
+        
+        
+       
+        # funkcja ustawiająca dostępność okna wyboru ścieżki zapisu pliku przy zmianie typu geometrii
+        def makeEnabled_2():
+            self.dlg.pathBox.setEnabled(True) 
+            
+       
+        # funkcja tworząca listę funkcji zabytków w zależności od wyboru typu geometrii
+        def funkcjaField():
+            
+            if (self.dlg.polygonBtn.isChecked()== True) or 'zabytki_powierzchniowe' in self.dlg.input.text():
+                dictionary={object.value.funkcja: object.value.funkcja for object in ObjectKindEnum if 'POLYGON' in object.value.geometria}
+            if (self.dlg.pointBtn.isChecked()== True) or 'zabytki_punktowe' in self.dlg.input.text():
+                dictionary={object.value.funkcja: object.value.funkcja for object in ObjectKindEnum if 'POINT' in object.value.geometria}
+            if (self.dlg.lineBtn.isChecked()== True) or 'zabytki_liniowe' in self.dlg.input.text():
+                dictionary={object.value.funkcja: object.value.funkcja for object in ObjectKindEnum if 'LINE' in object.value.geometria}
+            return dictionary
+
+        # funkcja tworząca listę kategorii zabytków w zależności od wyboru typu geometrii
+
+        def funkcjaFieldCategory():
+            if self.dlg.polygonBtn.isChecked()== True:
+                dictionary={object.value.kategoria: object.value.kategoria for object in CategoryKindEnum if 'POLYGON' in object.value.geometria}
+            if self.dlg.pointBtn.isChecked()== True:
+                dictionary={object.value.kategoria: object.value.kategoria for object in CategoryKindEnum if 'POINT' in object.value.geometria}
+            if self.dlg.lineBtn.isChecked()== True:
+                dictionary={object.value.kategoria: object.value.kategoria for object in CategoryKindEnum if 'LINE' in object.value.geometria}
+            return dictionary
+
+        
+        # funkcja wyboru typu geometrii
+
+        def geometryType():
+            if self.dlg.polygonBtn.isChecked()== True:
+                a=QgsWkbTypes.MultiPolygon
+            if self.dlg.pointBtn.isChecked()== True:
+                a=QgsWkbTypes.MultiPoint
+            if self.dlg.lineBtn.isChecked()== True:
+                a=QgsWkbTypes.MultiLineString
+            return a
+
+            
+        # funkcja tworząca predefiniowaną nazwę tworzonej warstwy w zależności od wyboru typu gemetrii
+              
+        def nameFile():
+            if self.dlg.polygonBtn.isChecked()== True or 'zabytki_powierzchniowe' in self.dlg.input.text():
+                a="zabytki_powierzchniowe"
+            if self.dlg.pointBtn.isChecked()== True or 'zabytki_punktowe' in self.dlg.input.text():
+                a="zabytki_punktowe"
+            if self.dlg.lineBtn.isChecked()== True or 'zabytki_liniowe' in self.dlg.input.text():
+                a="zabytki_liniowe"
+            return a
+
+        # funkcja tworząca predefiniowaną nazwę tworzonej warstwy tymczasowej zawierajacej zestaw funkcji zabytków w zależności od wyboranego typu geometrii warstwy i wybranej kategorii zabytku
+
+        def nameFunctionFile():
+            if self.dlg.polygonBtn.isChecked()== True or 'zabytki_powierzchniowe' in self.dlg.input.text():
+                a="Funkcje_zabytki_powierzchniowe"
+            if self.dlg.pointBtn.isChecked()== True or 'zabytki_punktowe' in self.dlg.input.text():
+                a="Funkcje_zabytki_punktowe"
+            if self.dlg.lineBtn.isChecked()== True or 'zabytki_liniowe' in self.dlg.input.text():
+                a="Funkcje_zabytki_liniowe"
+            return a
+            
+        # funkcja do tworzenia ścieżki zapisu utworzonej warstwy
+
+        def createLayerPath():
+
+            global savelayerPath
+
+            self.dlg.output.clear()
+            savelayerPath = QFileDialog.getSaveFileName(None,"Wybierz lokalizację",nameFile(), "*.shp")
+
+            if len(savelayerPath[0])==0:
+                msg=QMessageBox.critical(None,"Wybierz lokalizację zapisu pliku",'Nie wybrano lokalizacji!')
+            else:
+                self.dlg.geometryBox.setEnabled(False) 
+                self.dlg.createBtn.setEnabled(True)
+                self.dlg.output.setText(savelayerPath[0])
+
+        
+
+        # funkcja ustawień typów widżetów
+
+        def addStyleLayer(layer, memoryLayer):
+            nonlocal fieldName
+            
+            fieldIndex = layer.fields().indexFromName('KATEG')
+            editor_widget_setup = QgsEditorWidgetSetup( 'ValueMap', {'map': funkcjaFieldCategory()})
+            layer.setEditorWidgetSetup( fieldIndex, editor_widget_setup )
+
+          
+
+            fieldIndex = layer.fields().indexFromName('FUNKCJA')
+            editor_widget_setup = QgsEditorWidgetSetup( 'ValueRelation', {'AllowMulti': False, 'AllowNull': True, 'Description': '', 'FilterExpression': '"KATEG"=current_value(\'KATEG\')', 'Key': 'KATEG', 'LayerName': nameFunctionFile(), 'LayerProviderName': 'memory', 'NofColumns': 1, 'OrderByValue': True, 'UseCompleter': False, 'Value': 'FUNKCJA'})
+            layer.setEditorWidgetSetup( fieldIndex, editor_widget_setup )
+
+            
+            for name in fieldName:
+                fieldIndex = layer.fields().indexFromName(name)
+                if name.startswith('CZY'):
+                    editor_widget_setup = QgsEditorWidgetSetup( 'CheckBox', {'CheckedState': "TAK", 'UncheckedState': "NIE"} )
+                    layer.setEditorWidgetSetup( fieldIndex, editor_widget_setup)
+                if  fieldIndex!=8:
+                    layer.setFieldConstraint(fieldIndex, QgsFieldConstraints.ConstraintNotNull)
+
+        # funkcja tworząca warstwę tymczasową zawierającą zestaw funkcji zabytków w zależności od wyboranego typu geometrii warstwy i wybranej kategorii zabytku
+
+        def createFunctionLayer():
+            dictionary= funkcjaField()
+            vl = QgsVectorLayer('None', nameFunctionFile(), 'memory')
+            pr = vl.dataProvider()
+            vl.startEditing()
+            pr.addAttributes( [ QgsField("FUNKCJA", QVariant.String), QgsField("KATEG", QVariant.String)] )
+            fet = QgsFeature()
+
+            for object in ObjectKindEnum:
+                for dict in dictionary:
+                    if object.value.funkcja==dict:
+                        fet.setAttributes([object.value.funkcja,object.value.kategoria])
+                        pr.addFeatures( [ fet ] )
+
+            vl.commitChanges()
+            QgsProject.instance().addMapLayer(vl)
+
+            return vl
+
+        #funkcja tworząca aliasy nazw pól tworzonej warstwy
+        def createFieldAlias(layer):
+            nonlocal fieldName 
+            alias=['Nazwa obiektu', 'Kategoria obiektu','Funkcja obiektu','Czy obiekt stanowi część zespołu?','Datowanie obiektu','Dokumenty dotyczące ewentualnej ochrony','Czy obiekt jest w dzierżawie?','Czy obiekt jest dostępny do zwiedzania?','Uwagi']
+            for i in range (0, len(fieldName)):
+                layer.setFieldAlias(i,alias[i])
+
+        #funkcja określająca długość pól tworzonej warstwy
+
+        def longOfField(name):
+            long=None
+            nonlocal fieldName
+            if name.startswith('CZY'):
+                long=3
+            elif name==fieldName[0] or name==fieldName[5]:
+                long=100
+            elif name==fieldName[1] or name==fieldName[2] or name==fieldName[4]:
+                long=50
+            else:
+                long=254
+            return long
+
+
+        #funkcja tworząca nową warstwę z zabytkami
+
+        def createLayer():
+            global savelayerPath
+            nonlocal fieldName
+            layerList = QgsProject.instance().mapLayersByName(nameFile())
+            if layerList==[]:       
+                fields = QgsFields()
+                for name in fieldName:
+                    fields.append(QgsField(name, QVariant.String, "text", longOfField(name)))
+                crs = QgsCoordinateReferenceSystem('EPSG:2180')
+                writer = QgsVectorFileWriter(savelayerPath[0], 'utf-8', fields,  geometryType(), crs, "ESRI Shapefile")
+                del writer
+                layer = QgsVectorLayer(savelayerPath[0], nameFile(), "ogr")
+                createFieldAlias(layer)
+                layer.setCrs(crs)
+                QgsProject.instance().addMapLayers([layer])
+                addStyleLayer(layer,createFunctionLayer())
+                pathqml = savelayerPath[0][:-4]+'.qml'  
+                layer.saveNamedStyle(pathqml)
+                createBoxCleare()
+            else:
+                msg=QMessageBox.critical(None,"Utwórz inną warstwę",'Warstwa o wybranej geometrii jest już w projekcie!')
+                createBoxCleare()
+        
+        #funkcja "czyszcząca" pola sekcji tworzenia warstwy
+       
+        def createBoxCleare():
+            self.dlg.output.clear()
+            self.dlg.geometryBox.setEnabled(True)
+            self.dlg.createBtn.setEnabled(False)            
+            savelayerPath == ""
+
+        #funkcja wyboru istniejącej warstwy warstwy do edycji
+
+        def openLayerPath():
+            global openLayerPath
+            self.dlg.input.clear()
+            openLayerPath = QFileDialog.getOpenFileName(None, "Wybierz plik shapefile", "", "Shapefile (*.shp)")
+
+
+            if len(openLayerPath[0])==0:
+                msg=QMessageBox.critical(None,"Wybierz plik shapefile",'Nie wybrano pliku shapefile!')
+            else:   
+                
+                self.dlg.input.setText(openLayerPath[0])
+                if 'zabytki_powierzchniowe' in self.dlg.input.text() or 'zabytki_punktowe' in self.dlg.input.text() or 'zabytki_liniowe' in self.dlg.input.text():
+                    self.dlg.openBtn.setEnabled(True)
+                else: 
+                    msg=QMessageBox.critical(None,"Wybierz prawidłowy plik shapefile",'Wybrano nieprawidłowy shapefile!')
+                
+
+        #funkcja otworzenia w projekcie istniejącej warstwy do edycji
+
+        def openLayer():
+            global openLayerPath
+            layerList = QgsProject.instance().mapLayersByName(nameFile())
+            if layerList==[]:
+                openedLayer = QgsVectorLayer(openLayerPath[0], nameFile(), "ogr")
+                crs = QgsCoordinateReferenceSystem('EPSG:2180')
+                openedLayer.setCrs(crs)
+                QgsProject.instance().addMapLayers([openedLayer])
+                createFunctionLayer()
+                self.dlg.input.clear()
+                self.dlg.openBtn.setEnabled(False) 
+            else:
+                msg=QMessageBox.critical(None,"Wybierz inny plik shapefile",'Wybrany plik jest już otwarty w projekcie!')
+                self.dlg.input.clear() 
+                self.dlg.openBtn.setEnabled(False)      
+
+       
+                   
+
+        #funkcja "czyszcząca" pola formularza
+
+        def clearForm():
+            global savelayerPath
+            savelayerPath=[]
+            self.dlg.buttonGroup.setExclusive(False)
+            self.dlg.buttonGroup_2.setExclusive(False)        
+            self.dlg.polygonBtn.setChecked(False)
+            self.dlg.pointBtn.setChecked(False)
+            self.dlg.lineBtn.setChecked(False)
+            self.dlg.createLayerBtn.setChecked(False)
+            self.dlg.editBtn.setChecked(False)
+            self.dlg.buttonGroup.setExclusive(True)
+            self.dlg.buttonGroup_2.setExclusive(True)
+            self.dlg.output.clear()
+            self.dlg.input.clear()
+            self.dlg.selectActionBox.setEnabled(True)
+            self.dlg.createBox.setEnabled(False)
+            self.dlg.selectActionBox.setEnabled(True)
+            self.dlg.editBox.setEnabled(False)
               
 
         def close():
-           
+            clearForm()
             self.dlg.close()
 
-       
+        #przypisanie funkcji elementom formularza
+
+        self.dlg.createBtn.clicked.connect(createLayer)
+        self.dlg.closeBtn.clicked.connect(close)
+        self.dlg.outputBtn.clicked.connect(createLayerPath)
+        self.dlg.clearBtn.clicked.connect(clearForm)
+        self.dlg.inputBtn.clicked.connect(openLayerPath)
+        self.dlg.openBtn.clicked.connect(openLayer)
+        self.dlg.pointBtn.toggled.connect(makeEnabled_2)
+        self.dlg.lineBtn.toggled.connect(makeEnabled_2)
+        self.dlg.polygonBtn.toggled.connect(makeEnabled_2)    
+        self.dlg.createLayerBtn.toggled.connect(makeEnabled)
+        self.dlg.editBtn.toggled.connect(makeEnabled)
         
 
          # show the dialog
