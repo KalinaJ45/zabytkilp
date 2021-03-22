@@ -196,11 +196,34 @@ class ZabytkiLP:
             self.first_start = False
             self.dlg = ZabytkiLPDialog()
 
-     
         # zmienne globalne
         savelayerPath=""
         openLayerPath=""
         fieldName=["NAZWA", "KATEG", "FUNKCJA", "CZY_ZESP", "DATOW","DOKUM","CZY_DZIER","CZY_DOST","UWAGI"]
+
+        #funkcja "czyszcząca" pola formularza
+
+        def clearForm():
+            global savelayerPath
+            savelayerPath=[]
+            self.dlg.buttonGroup.setExclusive(False)
+            self.dlg.buttonGroup_2.setExclusive(False)        
+            self.dlg.polygonBtn.setChecked(False)
+            self.dlg.pointBtn.setChecked(False)
+            self.dlg.lineBtn.setChecked(False)
+            self.dlg.createLayerBtn.setChecked(False)
+            self.dlg.editBtn.setChecked(False)
+            self.dlg.buttonGroup.setExclusive(True)
+            self.dlg.buttonGroup_2.setExclusive(True)
+            self.dlg.output.clear()
+            self.dlg.input.clear()
+            self.dlg.selectActionBox.setEnabled(True)
+            self.dlg.createBox.setEnabled(False)
+            self.dlg.selectActionBox.setEnabled(True)
+            self.dlg.editBox.setEnabled(False)
+
+        clearForm()
+       
 
         # funkcja ustawiająca dostępność sekcji i przycisków przy wyborze opcji edycji obiektu
         def makeEnabled():
@@ -440,26 +463,7 @@ class ZabytkiLP:
        
                    
 
-        #funkcja "czyszcząca" pola formularza
-
-        def clearForm():
-            global savelayerPath
-            savelayerPath=[]
-            self.dlg.buttonGroup.setExclusive(False)
-            self.dlg.buttonGroup_2.setExclusive(False)        
-            self.dlg.polygonBtn.setChecked(False)
-            self.dlg.pointBtn.setChecked(False)
-            self.dlg.lineBtn.setChecked(False)
-            self.dlg.createLayerBtn.setChecked(False)
-            self.dlg.editBtn.setChecked(False)
-            self.dlg.buttonGroup.setExclusive(True)
-            self.dlg.buttonGroup_2.setExclusive(True)
-            self.dlg.output.clear()
-            self.dlg.input.clear()
-            self.dlg.selectActionBox.setEnabled(True)
-            self.dlg.createBox.setEnabled(False)
-            self.dlg.selectActionBox.setEnabled(True)
-            self.dlg.editBox.setEnabled(False)
+        
               
 
         def close():
