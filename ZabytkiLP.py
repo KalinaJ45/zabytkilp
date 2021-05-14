@@ -28,6 +28,7 @@ from qgis.core import *
 from PyQt5.QtCore import QVariant, QFileInfo
 from .object_kind import ObjectKindEnum
 from .category_kind import CategoryKindEnum
+from .document_kind import DokumentKindEnum
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -329,6 +330,10 @@ class ZabytkiLP:
             
             fieldIndex = layer.fields().indexFromName('KATEG')
             editor_widget_setup = QgsEditorWidgetSetup( 'ValueMap', {'map': funkcjaFieldCategory()})
+            layer.setEditorWidgetSetup( fieldIndex, editor_widget_setup )
+
+            fieldIndex = layer.fields().indexFromName('DOKUM')
+            editor_widget_setup = QgsEditorWidgetSetup( 'ValueMap', {'map': {document.value.rodzaj: document.value.rodzaj for document in DokumentKindEnum}})
             layer.setEditorWidgetSetup( fieldIndex, editor_widget_setup )
 
           
