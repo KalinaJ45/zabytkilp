@@ -386,12 +386,12 @@ class ZabytkiLP:
             nonlocal fieldName
             if name.startswith('CZY'):
                 long=3
-            elif name==fieldName[0] or name==fieldName[5]:
+            elif name==fieldName[0]:
                 long=100
-            elif name==fieldName[1] or name==fieldName[2] or name==fieldName[4]:
-                long=50
-            else:
+            elif name==fieldName[8]:
                 long=254
+            else:
+                long=50
             return long
 
 
