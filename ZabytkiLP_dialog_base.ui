@@ -10,6 +10,18 @@
     <height>597</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>374</width>
+    <height>597</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>374</width>
+    <height>597</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Zabytki LP</string>
   </property>
@@ -90,29 +102,29 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QRadioButton" name="createLayerBtn">
+       <widget class="QRadioButton" name="createLayerRBtn">
         <property name="text">
          <string>Twórz warstwę</string>
         </property>
         <attribute name="buttonGroup">
-         <string notr="true">buttonGroup_2</string>
+         <string notr="true">actionBtnGroup</string>
         </attribute>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="editBtn">
+       <widget class="QRadioButton" name="editLayerRBtn">
         <property name="text">
          <string>Edytuj warstwę</string>
         </property>
         <attribute name="buttonGroup">
-         <string notr="true">buttonGroup_2</string>
+         <string notr="true">actionBtnGroup</string>
         </attribute>
        </widget>
       </item>
      </layout>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="createBox">
+   <widget class="QGroupBox" name="createLayerBox">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -127,7 +139,7 @@
     <property name="title">
      <string>Twórz warstwę</string>
     </property>
-    <widget class="QGroupBox" name="geometryBox">
+    <widget class="QGroupBox" name="selectGeometryBox">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -156,39 +168,39 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QRadioButton" name="pointBtn">
+        <widget class="QRadioButton" name="pointRBtn">
          <property name="text">
           <string>Punkt</string>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
+          <string notr="true">geometryBtnGroup</string>
          </attribute>
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="lineBtn">
+        <widget class="QRadioButton" name="lineRBtn">
          <property name="text">
           <string>Linia</string>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
+          <string notr="true">geometryBtnGroup</string>
          </attribute>
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="polygonBtn">
+        <widget class="QRadioButton" name="polygonRBtn">
          <property name="text">
           <string>Poligon</string>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
+          <string notr="true">geometryBtnGroup</string>
          </attribute>
         </widget>
        </item>
       </layout>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="pathBox">
+    <widget class="QGroupBox" name="saveLayerBox">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -214,7 +226,7 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QLineEdit" name="output">
+        <widget class="QLineEdit" name="outputLE">
          <property name="text">
           <string/>
          </property>
@@ -231,7 +243,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="createBtn">
+        <widget class="QPushButton" name="createLayerBtn">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -244,7 +256,7 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="editBox">
+   <widget class="QGroupBox" name="editLayerBox">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -259,7 +271,7 @@
     <property name="title">
      <string>Edytuj warstwę</string>
     </property>
-    <widget class="QGroupBox" name="selectBox">
+    <widget class="QGroupBox" name="selectFileBox">
      <property name="geometry">
       <rect>
        <x>19</x>
@@ -282,7 +294,7 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QLineEdit" name="input"/>
+        <widget class="QLineEdit" name="inputLE"/>
        </item>
        <item>
         <widget class="QToolButton" name="inputBtn">
@@ -292,7 +304,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="openBtn">
+        <widget class="QPushButton" name="openLayerBtn">
          <property name="text">
           <string>Otwórz</string>
          </property>
@@ -307,7 +319,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="actionBtnGroup"/>
+  <buttongroup name="geometryBtnGroup"/>
  </buttongroups>
 </ui>

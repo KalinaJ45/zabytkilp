@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
+import code
 
 from enum import Enum
 from dataclasses import dataclass
@@ -7,43 +8,42 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class CategoryKind:
-    kategoria: str
-    kod: str
-    geometria: list
-   
+    """Examines the class CategoryKindEnum to find fields. 
+    """
+    category: str
+    code: str
+    geometry: list
+
 
 class CategoryKindEnum(Enum):
-   
-   
-    ZABYTEK_NIERUCHOMY = CategoryKind(     
-        kategoria = "zabytek nieruchomy",
-        kod = "1",
-        geometria = ['POLYGON', 'LINE', 'POINT'])
-   
+    """Enum Class consist of kind of monuments categories as members.
+    """
+    ZABYTEK_NIERUCHOMY = CategoryKind(
+        category="zabytek nieruchomy",
+        code='1',
+        geometry=['POLYGON', 'LINE', 'POINT'])
+
     ZABYTEK_ARCHEOLOGICZNY = CategoryKind(
-        kategoria = "zabytek archeologiczny",
-        kod = "2",
-        geometria = ['POLYGON', 'LINE', 'POINT'])
-   
+        category="zabytek archeologiczny",
+        code='2',
+        geometry=['POLYGON', 'LINE', 'POINT'])
+
     ZABYTEK_RUCHOMY = CategoryKind(
-        kategoria = "zabytek ruchomy",
-        kod = "3",
-        geometria = ['POINT'],)
+        category="zabytek ruchomy",
+        code='3',
+        geometry=['POINT'],)
 
     OTOCZENIE_ZABYTKU = CategoryKind(
-        kategoria = "otoczenie zabytku",
-        kod = "4",
-        geometria = ['POLYGON'])
+        category="otoczenie zabytku",
+        code='4',
+        geometry=['POLYGON'])
 
     STREFA_OCHRONY_KONSERWATORSKIEJ = CategoryKind(
-        kategoria = "strefa ochrony konserwatorskiej",
-        kod = "5",
-        geometria = ['POLYGON'])
+        category="strefa ochrony konserwatorskiej",
+        code='5',
+        geometry=['POLYGON'])
 
     NAZWA_MIEJSCOWA = CategoryKind(
-        kategoria = "nazwa miejscowa",
-        kod = "6",
-        geometria = ['POINT'],)
-
-
-
+        category="nazwa miejscowa",
+        code='6',
+        geometry=['POINT'],)

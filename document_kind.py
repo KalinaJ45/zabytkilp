@@ -7,25 +7,35 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class DocumentKind:
-    rodzaj: str
-   
+    """Examines the class DokumentKindEnum to find fields. 
+    """
+    code: str
+    type: str
+
 
 class DokumentKindEnum(Enum):
-   
-    BRAK = DocumentKind(     
-        rodzaj = "brak")
+    """Enum Class consist of kind of momument protecion documents as members.
+    """
+    EWIDENCJA_KONSERWATORSKA = DocumentKind(
+        code='1',
+        type="ewidencja konserwatorska")
 
-    BRAK_INFO = DocumentKind(     
-        rodzaj = "brak informacji")
+    REJESTR_ZABYTKÓW = DocumentKind(
+        code='2',
+        type="rejestr zabytków")
 
-    EWIDENCJA_KONSERWATORSKA = DocumentKind(     
-        rodzaj = "ewidencja konserwatorska")
+    PLAN_ZAGOSPODAROWANIA = DocumentKind(
+        code='3',
+        type="miejscowy plan zagospodarwania przestrzennego")
 
-    PLAN_ZAGOSPODAROWANIA = DocumentKind(     
-        rodzaj = "miejscowy plan zagospodarwania przestrzennego")
-        
-    INNY = DocumentKind(     
-        rodzaj = "inny")
+    BRAK_INFO = DocumentKind(
+        code='4',
+        type="brak informacji")
 
+    BRAK = DocumentKind(
+        code='5',
+        type="brak")
 
-
+    INNY = DocumentKind(
+        code='6',
+        type="inny")

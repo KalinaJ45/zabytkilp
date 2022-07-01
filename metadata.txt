@@ -5,12 +5,12 @@
 [general]
 name=Zabytki LP
 qgisMinimumVersion=3.0
-description=Wtyczka pomocna do tworzenia warst geometrycznych z obiektami zabytkowymi
+description=Wtyczka pomocna do tworzenia warst geometrycznych z obiektami zabytkowymi. Do użytku pracowników Lasów Państwowych
 version=0.2
 author=Kalina Juszczyk
 email=kalina.juszczyk@lasy.gov.pl
 
-about=Wtyczka pomocna do tworzenia warst geometrycznych z obiektami zabytkowymi
+about=Wtyczka pomocna do tworzenia predefiniowanych warst geometrycznych z obiektami zabytkowymi LP. Podręcznik użykownika znajduje się w folderze help.
 tracker=http://bugs
 repository=http://repo
 # End of mandatory metadata
